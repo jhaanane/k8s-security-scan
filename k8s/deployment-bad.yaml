@@ -1,32 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webapp-secure
+  name: webapp
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: webapp-secure
+      app: webapp
   template:
     metadata:
       labels:
-        app: webapp-secure
+        app: webapp
     spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
-        seccompProfile:
-          type: RuntimeDefault
       containers:
       - name: webapp
         image: nginx:1.25-alpine
         securityContext:
           allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
+          readOnlyRootFilesystem: false
           capabilities:
             drop: ["ALL"]
-        resources:
-          limits:
-            cpu: "200m"
-            memory: "128Mi"
+        ports:
+        - containerPort: 80
