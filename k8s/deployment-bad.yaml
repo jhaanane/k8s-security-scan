@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webapp
+  name: webapp-secure
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: webapp
+      app: webapp-secure
   template:
     metadata:
       labels:
-        app: webapp
+        app: webapp-secure
     spec:
       securityContext:
         runAsNonRoot: true
@@ -20,9 +20,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: webapp
-        image: nginx:1.25
-        ports:
-        - containerPort: 80
+        image: nginx:1.25-alpine
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
